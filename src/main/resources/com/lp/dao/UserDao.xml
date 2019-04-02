@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lp.dao.UserDao">
+    <!--注册用户-->
+    <insert id="addUser" parameterType="User">
+        insert into tab_user values (null,#{username},#{password},#{name},#{birthday},#{sex},#{telephone},#{email},#{status},#{code})
+    </insert>
+    <!--查看所有用户-->
+    <select id="selectAll" resultType="User">
+        select * from tab_user;
+    </select>
+
+    <!--添加收藏-->
+    <insert id="addfavor" parameterType="Favorite">
+        insert into tab_favorite values (#{rid},#{date},#{uid});
+    </insert>
+    <!--根据routeid修改该路线收藏次数-->
+    <update id="updateRouteOne" parameterType="int" >
+       UPDATE tab_route SET COUNT=COUNT+1 WHERE rid=#{rid}
+    </update>
+
+    <!--取消收藏-->
+    <delete id="deletefavor" parameterType="favorite">
+        delete from tab_favorite where uid=#{uid} and rid=#{rid}
+    </delete>
+    <!--根据routeid修改该路线收藏次数-->
+    <update id="deleteupdateRouteOne" parameterType="int" >
+       UPDATE tab_route SET COUNT=COUNT-1 WHERE rid=#{rid}
+    </update>
+    <!--搜索该用户的收藏-->
+    <select id="selectFavo" parameterType="int" resultType="favorite">
+      select * from tab_favorite where uid=#{uid}
+    </select>
+
+    <!--分页搜索该用户的收藏-->
+    <select id="selectFavolimit" resultType="favorite" parameterType="int">
+       select * from tab_favorite where uid=#{uid} order by date desc
+    </select>
+    <!--邮箱验证-->
+    <update id="emailCheck" parameterType="string">
+      update tab_user set status="Y" where code=#{code}
+    </update>
+
+
+
+</mapper>

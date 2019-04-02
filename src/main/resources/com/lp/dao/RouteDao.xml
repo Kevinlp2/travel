@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lp.dao.RouteDao">
+    <select id="selectAll" resultType="route">
+        select * from tab_route
+    </select>
+
+    <select id="selectAllcid" parameterType="int" resultType="route">
+        select * from tab_route where cid=#{cid}
+    </select>
+    <select id="selectCount" parameterType="int" resultType="int">
+       select count(*) from tab_route where cid=#{cid} ;
+    </select>
+
+    <select id="selectOne" parameterType="int" resultType="route">
+       select * from tab_route where rid=#{rid}
+    </select>
+
+    <select id="selectSome" parameterType="int" resultType="routeimg">
+       select * from tab_route_img where rid=#{rid}
+    </select>
+
+    <!--根据sid查询商家-->
+    <select id="selectSellOne" parameterType="int" resultType="seller">
+        select * from tab_seller where sid=#{sid}
+    </select>
+
+    <!--收藏排行榜-->
+    <select id="selectCountsc" resultType="route">
+        SELECT * FROM tab_route WHERE COUNT>0  ORDER BY COUNT DESC
+    </select>
+    <!--收藏排行耪总数-->
+    <select id="selectCounts" resultType="int">
+       SELECT count(*) FROM tab_route WHERE COUNT>0  ORDER BY COUNT DESC
+    </select>
+
+    <!--收藏排行耪模糊查询-->
+    <select id="selectlike" resultType="route" parameterType="queryvo">
+        select * from tab_route where count>0
+        <if test="routename != '' and routename != null">
+            and rname like #{routename}
+        </if>
+        <if test="routeprice1 != ''">
+            and price > #{routeprice1}
+        </if>
+        <if test="routeprice2 != ''">
+            and #{routeprice2} > price
+        </if>
+
+         ORDER BY COUNT DESC
+    </select>
+
+    <!--路线搜索-->
+    <select id="selectSou" parameterType="queryvo" resultType="route" >
+        select * from tab_route where 1=1
+        <if test="routename != '' and routename != null">
+            and rname like #{routename}
+        </if>
+        ORDER BY COUNT DESC
+    </select>
+
+    <!--最新旅游-->
+    <select id="selectDate" resultType="route">
+        SELECT * FROM tab_route ORDER BY rdate DESC limit 4
+    </select>
+    <!--主题旅游-->
+    <select id="selectIsTh" resultType="route">
+        SELECT * FROM tab_route WHERE isThemeTour=1 limit 4
+    </select>
+</mapper>
